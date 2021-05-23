@@ -3,7 +3,8 @@
 # Script de transfert de script
 # Version 1 - 23/05/2021
 
-ssh administrateur@192.168.100.13
+#création de la liste des ip des ordinateurs connectés
 
-echo "administrateur"
+#connexion en SSH au PC
+sshpass -p administrateur ssh administrateur@192.168.100.13
 
