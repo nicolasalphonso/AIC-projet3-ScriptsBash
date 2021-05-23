@@ -4,6 +4,20 @@
 # test de l'initialisation du compte utilisateur et changement du hostname
 # +test de la réinitialisation de la machine
 
+## Effacement de tous les utilisateurs sauf root
+tableauUtilisateurs=$(grep bash /etc/passwd | cut -f1 -d:)
+
+# on enlève root du tableau d'utilisateurs
+tableauUtilisateurs=("${tableauUtilisateurs[@]/root}")
+
+# on supprimer les utilisateurs
+for utilisateur in $tableauUtilisateurs
+do
+	echo "utilisateur à effacer: $utilisateur"
+	userdel $utilisateur
+	rm -r /home/$utilisateur
+done
+
 # récupération de l'adresse ip
 adresseIp=$(hostname -I)
 echo "Adresse Ip du PC : $adresseIp"
@@ -16,6 +30,7 @@ echo "le numéro d'hôte est : $numeroHostname"
 
 # détermination du réseau auquel appartient le PC
 # cela donne le début du nom du hostname
+
 
 debutNomHostname=""
 
@@ -39,18 +54,19 @@ echo "Le hostname est: $hostnameChoisi"
 # changement du hostname de l'ordinateur
 hostnamectl set-hostname $hostnameChoisi
 
+
 # creation de l'utilisateur
 # avec création préalable du groupe
 addgroup $debutNomHostname
 
 usernameChoisi=u${hostnameChoisi}
 
-useradd ${usernameChoisi} --home /home/${usernameChoisi} --create-home --groups ${debutNomHostname} --gid ${debutNomHostname} --shell /bin/bash
+useradd --home-dir /home/${usernameChoisi} --create-home --groups ${debutNomHostname} --gid ${debutNomHostname} --shell /bin/bash ${usernameChoisi}
 
-echo -e "mdp\nmdp" | passwd -e ${usernameChoisi}
+echo -e "mdp\nmdp"
+
+echo -e "mdp\nmdp" | passwd ${usernameChoisi}
+
+passwd -e ${usernameChoisi}
 
 echo "Ce PC est initialisé avec l'utilisateur ${usernameChoisi}, le mot de passe initial \"mdp\". Il est connecté au réseau ${debutNomHostname}"
-
-# on supprime l utilisateur d installation
-userdel -r -f nicolasalphonso
-echo "l'effacement du compte nicolasalphonso est confirmée"
