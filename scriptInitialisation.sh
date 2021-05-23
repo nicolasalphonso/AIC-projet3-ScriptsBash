@@ -1,8 +1,7 @@
 #!/bin/bash
-#Nicolas Alphonso - TP3 OpenClassrooms
-#Script version 2
-# test de l'initialisation du compte utilisateur et changement du hostname
-# +test de la réinitialisation de la machine
+# Nicolas Alphonso - TP3 OpenClassrooms
+# Script d'initialisation / réinitialisation des machines
+# connectées aux réseaux abeille et baobab
 
 ## Effacement de tous les utilisateurs sauf root et administrateur
 # on récupère la liste des noms des utilisateurs
