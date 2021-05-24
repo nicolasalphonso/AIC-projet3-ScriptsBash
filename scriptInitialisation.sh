@@ -3,9 +3,9 @@
 # Script d'initialisation / réinitialisation des machines
 # connectées aux réseaux abeille et baobab
 
-
+## on passe en sudo en passant une commande inutile
+# car la première commande sudo est dans une boucle
 echo administrateur | sudo -S echo ""
-
 
 
 ## Effacement de tous les utilisateurs sauf root et administrateur
