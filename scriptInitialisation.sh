@@ -3,6 +3,11 @@
 # Script d'initialisation / réinitialisation des machines
 # connectées aux réseaux abeille et baobab
 
+
+echo administrateur | sudo -S echo ""
+
+
+
 ## Effacement de tous les utilisateurs sauf root et administrateur
 # on récupère la liste des noms des utilisateurs
 tableauUtilisateurs=$(grep bash /etc/passwd | cut -f1 -d:)
@@ -18,8 +23,8 @@ tableauUtilisateurs=("${tableauUtilisateurs[@]/administrateur}")
 for utilisateur in $tableauUtilisateurs
 do
 	echo "utilisateur à effacer: $utilisateur"
-	userdel $utilisateur
-	rm -r /home/$utilisateur
+	sudo userdel $utilisateur
+	sudo rm -r /home/$utilisateur
 done
 
 ## détermination du hostname
@@ -60,19 +65,19 @@ hostnamectl set-hostname $hostnameChoisi
 ## création de l'utilisateur
 # création du groupe
 # s'il existe déjà, il y aura juste un message d'avertissement
-addgroup $debutNomHostname
+sudo addgroup $debutNomHostname
 
 # détermination du nom d'utilisateur = u(+)réseau
 usernameChoisi=u${hostnameChoisi}
 
 # ajout de l'utilisateur avec création de son espace
-useradd --home-dir /home/${usernameChoisi} --create-home --groups ${debutNomHostname} --gid ${debutNomHostname} --shell /bin/bash ${usernameChoisi}
+sudo useradd --home-dir /home/${usernameChoisi} --create-home --groups ${debutNomHostname} --gid ${debutNomHostname} --shell /bin/bash ${usernameChoisi}
 
 # activation de l'utilisateur en validant son mot de passe "mdp"
-echo -e "mdp\nmdp" | passwd ${usernameChoisi}
+echo -e "mdp\nmdp" | sudo passwd ${usernameChoisi}
 
 # le mot de passe devra être changé à la première connexion
-passwd -e ${usernameChoisi}
+sudo passwd -e ${usernameChoisi}
 
 ## message de fin
 echo "Ce PC est initialisé avec l'utilisateur ${usernameChoisi}, le mot de passe initial \"mdp\". Il est connecté au réseau ${debutNomHostname}"
