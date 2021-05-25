@@ -60,7 +60,7 @@ hostnameChoisi=${debutNomHostname}${numeroHostname}
 echo "Le hostname est: $hostnameChoisi"
 
 # changement du hostname de l'ordinateur
-hostnamectl set-hostname $hostnameChoisi
+sudo hostnamectl set-hostname $hostnameChoisi
 
 ## création de l'utilisateur
 # création du groupe

@@ -1,0 +1,40 @@
+#!/bin/bash
+# Nicolas Alphonso - TP3 OpenClassrooms
+# Script de suppression des utilisateurs des machines hors root et administrateur
+# Version 2 - 25/05/2021
+
+## création de la liste des ip des ordinateurs connectés
+adressesIpAbeille=$(fping -agq 192.168.100.2 192.168.100.254)
+echo -e "Adresses actives du réseau abeille:\n$adressesIpAbeille"
+
+adressesIpBaobab=$(fping -agq 192.168.101.2 192.168.101.254)
+echo -e "Adresses actives du réseau baobab:\n$adressesIpBaobab"
+
+
+## transfert du fichier aux PC connectés au réseau Abeille
+for adresseAbeille in $adressesIpAbeille
+do
+	echo "Transfert au PC: $adresseAbeille"
+	# ajout de l'adresse IP aux hôtes connus (~/.ssh/known hosts)
+	# si elle est inconnue - sans interaction utilisateur
+	sshpass -p administrateur scp -p /root/scripts/scriptDeleteUser.sh administrateur@$adresseAbeille:/home/administrateur/scriptDeleteUser.sh
+	sshpass -p administrateur ssh -tt -o StrictHostkeyChecking=no administrateur@$adresseAbeille << 'EOF'
+		crontab -r
+		rm /home/administrateur/scriptInitialisation.sh
+		/bin/bash /home/administrateur/scriptDeleteUser.sh
+		exit
+EOF
+done
+
+## transfert du fichier aux PC connectés au réseau Baobab
+for adresseBaobab in $adressesIpBaobab
+do
+	sshpass -p administrateur scp -p /root/scripts/scriptDeleteUser.sh administrateur@$adresseBaobab:/home/administrateur/scriptDeleteUser.sh
+	sshpass -p administrateur ssh -tt -o StrictHostkeyChecking=no administrateur@$adresseBaobab << 'EOF'
+		crontab -r
+		rm /home/administrateur/scriptInitialisation.sh
+		/bin/bash /home/administrateur/scriptDeleteUser.sh
+		exit
+EOF
+done
+
