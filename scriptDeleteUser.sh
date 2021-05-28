@@ -15,9 +15,9 @@ tab=("${tab[@]/root}")
 tab=("${tab[@]/administrateur}")
 
 # On efface chaque utilisateur affiché dans le tableau
-for $user in $tab
+for utilisateur in $tab
 do
-	sudo userdel $user
-	sudo rm -r /home/$user
+	sudo userdel $utilisateur
+	sudo rm -r /home/$utilisateur
 done
 
