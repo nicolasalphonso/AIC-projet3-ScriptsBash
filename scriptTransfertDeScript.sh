@@ -11,7 +11,7 @@ transfert()
 	# si elle est inconnue - sans interaction utilisateur
 	sshpass -p administrateur ssh -tt -o StrictHostkeyChecking=no administrateur@$1 << 'EOF'
 		crontab -r
-		(crontab -l 2>/dev/null; echo "14 11 * * 5 /home/administrateur/scriptInitialisation.sh > RapportInitialisation.log") | crontab -
+		(crontab -l 2>/dev/null; echo "30 17 * * 5 /home/administrateur/scriptInitialisation.sh > RapportInitialisation.log") | crontab -
 		exit
 EOF
 	# transfert du script d'initialisation
